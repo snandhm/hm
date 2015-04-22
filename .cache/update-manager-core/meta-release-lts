@@ -1,0 +1,457 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>福建移动高校wlan登录</title>
+<link href="css/ccb.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript" src="js/jquery.pack.js"></script>
+<script type="text/javascript" src="js/jquery.SuperSlide.js"></script>
+<script type="text/javascript" src="js/adengweb.js"></script>
+<script language="javascript" src="js/jquery.min.js"></script>
+<script language="javascript" src="js/util.js"></script>
+<script language="javascript" src="../../../../../js/wlan_msg.js"></script>
+<script type="text/javascript" src="http://webim.feixin.10086.cn/webimbar/v2/js/fetionAjaxHelper.js"></script>
+
+<script type="text/javascript">
+function tips_pop1(){
+	var hheight = document.body.clientHeight;//网页可见区域高
+	jQuery("#hidediv").css("height",hheight);
+	jQuery("#hidediv").show();
+	jQuery("#tcts1").show();
+	jQuery("#tcts2").hide();
+	//jQuery("body").css("overflow","hidden");
+	jQuery("body").toggleClass("ovebody");
+}
+function tips_pop2() {
+	var hheight = document.body.clientHeight;//网页可见区域高
+	jQuery("#hidediv").css("height",hheight);
+	jQuery("#hidediv").show();
+	jQuery("#tcts2").show();
+	jQuery("#tcts1").hide();
+	//jQuery("body").css("overflow","hidden");
+	jQuery("body").toggleClass("ovebody");
+}
+function toueme(id){
+	jQuery("#"+id).hide();
+	jQuery("#hidediv").hide();
+	//jQuery("body").css("overflow","auto");
+	jQuery("body").toggleClass("ovebody");
+}
+
+</script>
+</head>
+
+<body class="ovebody">
+<div class="hide_div" id="hidediv"></div>
+<img id="loadimg" class="loadimg" src="images/loadimg.gif"/>
+
+<div id="tcts1" class="tcts" style="display:none;">
+<div class="tctsleft"></div>
+<div class="tctsc">
+<div class="tctsTitle"><a style="cursor: hand" onclick="toueme('tcts1')"></a>忘记密码</div>
+<p style="text-indent:2em; padding-top:20px;">&#12288尊敬的客户，如您忘记密码，请发送"CZEDUMM"到10086，重置后的密码将以短信形式下发到你的手机；或拔打当地10086客服重置密码。</p>
+</div>
+<div class="tctsright"></div>
+</div>
+
+<div id="tcts2" class="tcts"  style="display:none;">
+<div class="tctsleft"></div>
+<div class="tctsc">
+<div class="tctsTitle"><a style="cursor: hand" onclick="toueme('tcts2')"></a>免费注册用户</div>
+<div style="height:120px">
+<p>l        校园无线宽带（WLAN）5元优惠套餐，每月100小时WLAN（CMCC-EDU）上网。（发KTEDUYH5到10086订购）</p>
+<p>l        校园无线宽带（WLAN）10元优惠套餐，每月250小时WLAN（CMCC-EDU）上网（发KTEDUYH10到10086订购）</p>
+<p>l        校园无线宽带（WLAN）40元优惠套餐，每月不限时WLAN（CMCC-EDU）上网（发KTEDUYH40到10086订购）</p>
+</div>
+</div>
+<div class="tctsright"></div>
+</div>
+
+<div id="sverdivmsg" class="tcts" style="display:none;">
+<div class="tctsleft"></div>
+<div class="tctsc">
+<div class="tctsTitle"><a style="cursor: hand" onclick="shutdk3()"></a>提示信息</div>
+<p style="text-indent:2em; height:50px; padding-top:30px;" id="svermsg">尊敬的客户，您的浏览器暂不支持脚本，无法使用。谢谢！</p>
+<p><font style="float:right" id="svercode">msg_2301</font></p>
+</div>
+<div class="tctsright"></div>
+</div>
+
+<div id="popk" class="tcts">
+<div class="tctsleft"></div>
+<div class="tctsc">
+<div class="tctsTitle"><a style="cursor: hand" onclick="shutdk2()"></a>是否支持脚本</div>
+<p style="text-indent:2em; height:50px; padding-top:30px;">尊敬的客户，您的浏览器暂不支持脚本，无法使用。谢谢！</p>
+</div>
+<div class="tctsright"></div>
+</div>
+
+<div id="contentWrap" class="headWrap">
+	         	<img src="pimages/logo.jpg"/>
+</div>
+<div id="contentWrap">
+  <div class="main_right">
+  
+    <!-- 登录 star -->
+    <div class="login" id="login_con">
+      <div class="loginTab">
+        <ul>
+          <li id="bobo2_Menu_01" onclick="bobo_show2(0,1)" class="hotelactive"><span class="mima"></span></li>
+          <li class="zjTab"></li>
+          <li id="bobo2_Menu_02" onclick="bobo_show2(0,2)" class="hotelover"><span class="khao"></span></li>
+        </ul>
+      </div>
+      
+      <div class="srk" id="bobo2_box_01">
+      	<table width="100%" border="0" cellspacing="3">
+		  	<tr>
+		    	<td width="194"><div class="srzh"><input type="text" title="您的手机号" name="username1" id="username1" maxlength="11" onchange="changeText();" /><a style="cursor: pointer" onclick="sendSMS();"><img src="images/yanz.png" id="smsimg"/></a></div></td>
+		    	<td width="63" rowspan="2" class="nl"><div><a onclick="sumbit('1')" style="cursor: pointer"><img src="images/ann_03.png" /></a></div></td>
+		  	</tr>
+		  	<tr>
+		    	<td><div class="srmim"><input name="userpwd1" id="userpwd1"  maxlength="6" type="text" title="输入验证码"/></div></td>
+		  	</tr>
+		  	<tr id="smstimediv" style="display:none;">
+            	<td height="25" colspan="2"><div class="tishi">离下次获取还有（<span id="smstime">0</span> 秒）</div></td>
+            </tr>
+		  	<tr>
+		    	<td colspan="2"><div class="yhmi"><a onclick="tips_pop2();" style="cursor: pointer">免费注册用户</a> | <a onclick="tips_pop1();" style="cursor: pointer">忘记密码</a></div></td>
+        	</tr>
+		</table> 
+      </div>
+      <div class="srk" id="bobo2_box_02" style="display:none;">
+		<table width="100%" border="0" cellspacing="3">
+		   <tr>
+		    <td width="194"><div class="srkhao"><input name="username2" id="username2" maxlength="11" type="text" title="输入卡号"/></div></td>
+		    <td width="63" rowspan="2" class="nl"><div><a onclick="sumbit('2')" style="cursor: pointer"><img src="images/ann_03.png" /></a></div></td>
+		  </tr>
+		  <tr>
+		    <td><div class="srmim"><input name="userpwd2" id="userpwd2"  maxlength="6" type="password" title="输入密码"/></div></td>
+		  </tr>
+		  <tr>
+            <td height="25" colspan="2"><div class="checkbox"><input name="isautologin" id="isautologin" type="checkbox" value="" onclick="onAutoLogin2();" /><label>自动登录</label>&nbsp;&nbsp;&nbsp;&nbsp;<input name="savpwd" id="savpwd" type="checkbox" value="" onclick="setUserPwd(null,null,this.checked);"/><label>记住密码</label></div></td>
+          </tr>
+		  <tr>
+		    <td colspan="2"><div class="yhmi"><a onclick="tips_pop2();" style="cursor: pointer">免费注册用户</a> | <a onclick="tips_pop1();" style="cursor: pointer">忘记密码</a></div></td>
+		  </tr>
+		</table>   
+      </div>
+    </div>
+    <!-- 登录 end -->
+    
+    <!-- 登录 star -->
+    <div class="login" id="login_con_l" style="display:none;">
+      <div class="dlh">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td colspan="2"><div><img src="images/dengluh_03.gif" /></div></td>
+            </tr>
+          <tr>
+            <td colspan="2"><div class="dlhBt" id="login_con_user"></div></td>
+            </tr>
+		  <tr>
+		    <td width=""><div class="hlhtime" id="login_time" >00:00:00</div></td>
+		    <td width=""><div><a style="cursor: pointer"  onclick="loginOut()" ><img src="images/dengluh_10.gif" /></a></div></td>
+		  </tr>
+		  <tr >
+            <td height="25" colspan="2">
+            <div class="checkbox">
+            <input name="isautologin1" id="isautologin1" type="checkbox" value="" onclick="onAutoLogin();" style="display:none;"/><label id="autotrlb" style="display:none;">自动登录</label>
+            &nbsp;&nbsp;&nbsp;&nbsp;<input name="savpwd1" id="savpwd1" type="checkbox" value="" onclick="setUserPwd(null,null,this.checked);"/><label>记住密码</label>
+            </div></td>
+          </tr>
+        </table>    
+      </div>    
+    </div>
+    <!-- 登录 end -->
+    
+    <!-- 最新资讯 star -->    
+    <div class="message">
+      <div class="messagebt"><a href="http://fj.12530.com/user/showTone.action" target="_blank">更多 &gt;&gt;</a>最新资讯</div>
+      <div class="messagenr">
+        <div class="nrimg" id="imgyq" ><img src="images/ab2.jpg" /></div>
+              	<p class="w1" ><a target="_blank" href="/count?accessType=1&type=3&id=2282" onmouseover='replaceimg("pimages/links/2282.jpg","/count?accessType=1&type=3&id=2282")' >10月12日 twins 泉州歌友会</a></p>
+              	<p class="w1" ><a target="_blank" href="/count?accessType=1&type=3&id=2285" onmouseover='replaceimg("pimages/links/2285.jpg","/count?accessType=1&type=3&id=2285")' >10月19日张敬轩+洪卓立+钟舒漫 三明</a></p>
+              	<p class="w1" ><a target="_blank" href="/count?accessType=1&type=3&id=2284" onmouseover='replaceimg("pimages/links/2284.jpg","/count?accessType=1&type=3&id=2284")' >11月15日 苏打绿 福州歌友会</a></p>
+              	<p class="w1" ><a target="_blank" href="/count?accessType=1&type=3&id=2281" onmouseover='replaceimg("pimages/links/2281.jpg","/count?accessType=1&type=3&id=2281")' >10月25日 品冠+丁当 福州歌友会</a></p>
+              	<p class="w2" ><a target="_blank" href="/count?accessType=1&type=3&id=2283" onmouseover='replaceimg("pimages/links/2283.jpg","/count?accessType=1&type=3&id=2283")' >10月20日 刘惜君 漳州歌友会</a></p>
+              	<p class="w2" ><a target="_blank" href="/count?accessType=1&type=3&id=2280" onmouseover='replaceimg("pimages/links/2280.jpg","/count?accessType=1&type=3&id=2280")' >10月20日 陈绮贞 漳州歌友会</a></p>
+      </div>
+    </div>
+    <!-- 最新资讯 end -->
+    
+  </div>
+  <div class="main_left">
+  
+    <!-- 焦点图 star -->
+    <div class="rollWrap">
+      <div id="demoContent" class="rollz">
+        <div class="effect" style="width:595px; position: relative; overflow:hidden;">
+        	<div class="leftLoop">
+				<a id="aup" class="next"></a>
+				<input type="hidden" value="0" id="aupdown"/>
+				<ul id="idNum" class="hd"></ul>
+				<a id="adown" class="prev"></a>
+                <div class="wkl"></div>
+                <div class="wkr"></div>
+<!--scroll_imgs-->
+<div class="bd"><div class="scroll_imgs">
+    <script language=javascript>
+        if(typeof(pgvMain) == 'function')
+            pgvMain();
+    </script>
+    <script>
+    var gtopTab="one";
+    function $id(id){
+     return document.getElementById(id); 
+    }
+    function changesTab(tab_id){
+     if (tab_id==gtopTab){
+      return; 
+     }else{
+      $id(gtopTab).className="unselect"; 
+      $id(tab_id).className="select";
+      $id("tab_"+gtopTab).style.display="none";
+      $id("tab_"+tab_id).style.display="block";
+      gtopTab=tab_id;
+     }
+    }
+    </script>
+    <script type=text/javascript>
+    var $ = function (id) {
+     return "string" == typeof id ? document.getElementById(id) : id;
+    };
+    var Extend = function(destination, source) {
+     for (var property in source) {
+      destination[property] = source[property];
+     }
+     return destination;
+    }
+    var CurrentStyle = function(element){
+     return element.currentStyle || document.defaultView.getComputedStyle(element, null);
+    }
+    var Bind = function(object, fun) {
+     var args = Array.prototype.slice.call(arguments).slice(2);
+     return function() {
+      return fun.apply(object, args.concat(Array.prototype.slice.call(arguments)));
+     }
+    }
+    var Tween = {
+     Quart: {
+      easeOut: function(t,b,c,d){
+       return -c * ((t=t/d-1)*t*t*t - 1) + b;
+      }
+     },
+     Back: {
+      easeOut: function(t,b,c,d,s){
+       if (s == undefined) s = 1.70158;
+       return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+      }
+     },
+     Bounce: {
+      easeOut: function(t,b,c,d){
+       if ((t/=d) < (1/2.75)) {
+        return c*(7.5625*t*t) + b;
+       } else if (t < (2/2.75)) {
+        return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
+       } else if (t < (2.5/2.75)) {
+        return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
+       } else {
+        return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
+       }
+      }
+     }
+    }
+    //容器对象,滑动对象,切换数量
+    var SlideTrans = function(conflash, slider, count, options) {
+     this._slider = $(slider);
+     this._conflash = $(conflash);//容器对象
+     this._timer = null;//定时器
+     this._count = Math.abs(count);//切换数量
+     this._target = 0;//目标值
+     this._t = this._b = this._c = 0;//tween参数
+     
+     this.Index = 0;//当前索引
+     
+     this.SetOptions(options);
+     
+     this.Auto = !!this.options.Auto;
+     this.Duration = Math.abs(this.options.Duration);
+     this.Time = Math.abs(this.options.Time);
+     this.Pause = Math.abs(this.options.Pause);
+     this.Tween = this.options.Tween;
+     this.onStart = this.options.onStart;
+     this.onFinish = this.options.onFinish;
+     
+     var bVertical = !!this.options.Vertical;
+     this._css = bVertical ? "top" : "left";//方向
+     
+     //样式设置
+     var p = CurrentStyle(this._conflash).position;
+     p == "relative" || p == "absolute" || (this._conflash.style.position = "relative");
+     //this._conflash.style.overflow = "hidden";
+     this._slider.style.position = "absolute";
+     
+     this.Change = this.options.Change ? this.options.Change :
+      this._slider[bVertical ? "offsetHeight" : "offsetWidth"] / this._count;
+    };
+    SlideTrans.prototype = {
+      //设置默认属性
+      SetOptions: function(options) {
+     this.options = {//默认值
+      Vertical: true,//是否垂直方向（方向不能改）
+      Auto:  true,//是否自动
+      Change:  0,//改变量
+      Duration: 50,//滑动持续时间
+      Time:  10,//滑动延时
+      Pause:  4000,//停顿时间(Auto为true时有效)
+      onStart: function(){},//开始转换时执行
+      onFinish: function(){},//完成转换时执行
+      Tween:  Tween.Quart.easeOut//tween算子
+     };
+     Extend(this.options, options || {});
+      },
+      //开始切换
+      Run: function(index) {
+     //修正index
+     index == undefined && (index = this.Index);
+     index < 0 && (index = this._count - 1) || index >= this._count && (index = 0);
+     //设置参数
+     this._target = -Math.abs(this.Change) * (this.Index = index);
+     this._t = 0;
+     this._b = parseInt(CurrentStyle(this._slider)[this.options.Vertical ? "top" : "left"]);
+     this._c = this._target - this._b;
+     
+     this.onStart();
+     this.Move();
+     
+     jQuery("#aupdown").val(index);
+      },
+      //移动
+      Move: function() {
+     clearTimeout(this._timer);
+     //未到达目标继续移动否则进行下一次滑动
+     if (this._c && this._t < this.Duration) {
+      this.MoveTo(Math.round(this.Tween(this._t++, this._b, this._c, this.Duration)));
+      this._timer = setTimeout(Bind(this, this.Move), this.Time);
+     }else{
+      this.MoveTo(this._target);
+      this.Auto && (this._timer = setTimeout(Bind(this, this.Next), this.Pause));
+     }
+      },
+      //移动到
+      MoveTo: function(i) {
+     this._slider.style[this._css] = i + "px";
+      },
+      //下一个
+      Next: function() {
+     this.Run(++this.Index);
+      },
+      //上一个
+      Previous: function() {
+     this.Run(--this.Index);
+      },
+      //停止
+      Stop: function() {
+     clearTimeout(this._timer); this.MoveTo(this._target);
+      }
+    };
+    </script>
+    
+<div id="idContainer2" class="conflash" style="overflow:visible ">
+                            <table id="idSlider2" border="0"  cellSpacing="0" cellPadding="0">
+                              <tbody>
+                                    <tr>
+	          	<td class=td_f><a style="cursor: pointer" onclick="onClickLbImg('http://218.207.217.3/advert/huimaishouji.html','2301');" ><img src="pimages/carousel/2301.jpg"/></a></td>
+	          	<td class=td_f><a style="cursor: pointer" onclick="onClickLbImg('http://218.207.217.3/advert/huixuantaocan.html','2302');" ><img src="pimages/carousel/2302.jpg"/></a></td>
+	          	<td class=td_f><a style="cursor: pointer" onclick="onClickLbImg('http://218.207.217.3/advert/zonggao.html','2303');" ><img src="pimages/carousel/2303.jpg"/></a></td>
+                                    </tr>
+                              </tbody>
+                            </table>
+</div>
+  <script>
+    var forEach = function(array, callback, thisObject){
+     if(array.forEach){
+      array.forEach(callback, thisObject);
+     }else{
+      for (var i = 0, len = array.length; i < len; i++) { callback.call(thisObject, array[i], i, array); }
+     }
+    }
+    var st = new SlideTrans("idContainer2", "idSlider2", 3, { Vertical: false });
+    // var sts = new SlideTrans("idContainer2", "idSlider2", 3, { Vertical: false });
+    jQuery("#aup").click(function(){
+    	var s=jQuery("#aupdown").val();
+    	var cs=parseInt(s);
+    	st.Run(++cs)
+    });
+    jQuery("#adown").click(function(){
+    	var s=jQuery("#aupdown").val();
+    	var cs=parseInt(s);
+    	st.Run(--cs)
+    });
+    var nums = [];
+    //插入数字
+    for(var i = 0, n = st._count - 1; i <= n;){
+     (nums[i] = $("idNum").appendChild(document.createElement("li"))).innerHTML = ++i;
+    }
+    forEach(nums, function(o, i){
+     o.onmouseover = function(){ o.className = "on"; st.Auto = false; st.Run(i); }
+     o.onmouseout = function(){ o.className = ""; st.Auto = true; st.Run(); }
+    })
+    //设置按钮样式
+    st.onStart = function(){
+     forEach(nums, function(o, i){ o.className = st.Index == i ? "on" : ""; })
+    }
+    st.Run();
+    </script>
+</div></div>
+<!--scroll_pic end--> 
+		  </div> 
+        </div>
+      </div>
+    </div>
+    <!-- 焦点图 end -->
+    
+    <!-- 使用说明 star -->    
+    <div class="explain">
+      <div class="extitle"><span>使用说明</span></div>
+      <div class="exzt">
+        <div class="exztl">
+		            	<img src="pimages/advert.jpg"/>
+        </div>
+        <div class="exztr">
+        	<p>	尊敬的客户，您已进入"无线城市"WIFI免费区，您可以通过以下方式获取移动WLAN临时上网账号，体验无线高速上网服务：<br />1,在右侧"手机号"输入框中输入您的手机号码，点击"获取随机短信验证码"按钮，几秒钟后系统将会以短信方式把您的短信验证码下发到您的手机上。<br />2,将您收到的短信验证码输入左侧的"验证码"输入框中，并勾选"我已经阅读同意无线上网条款"，点击"登陆"按钮后即可登陆"无线城市"移动WLAN网络。</p><table>	<tbody>		<tr>			<td>				注：			</td>			<td>				1）中国移动、中国电信和中国联通客户均可申请使用。			</td>		</tr>		<tr>			<td>				<br />			</td>			<td>				2）该账号仅在"无线城市"-移动WIFI免费区有效。			</td>		</tr>		<tr>			<td>				<br />			</td>			<td>				3）临时账号与您的手机号码绑定，请妥善保管，勿借他人使用。			</td>		</tr>		<tr>			<td>				<br />			</td>			<td>				4）临时账号可上网5小时，逾时可重复申请。			</td>		</tr>		<tr>			<td>				<br />			</td>			<td>				说明：5小时是指用户上网累计5小时			</td>		</tr>	</tbody></table>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <div style="text-align:center"><img src="images/dbx_23.gif" /></div>
+    </div>
+    <!-- 使用说明 end -->
+  </div>
+  <div class="clear"></div>
+</div>
+
+<div id="contentWrap" class="footertop">
+  <div class="wzlj">
+  	<li><a target="_blank" href="business.htm">业务介绍</a></li>
+	     	<li>|</li>
+              <li><a target="_blank" href="/count?accessType=1&type=6&id=2289">客户端下载</a></li>
+	     	<li>|</li>
+              <li><a target="_blank" href="/count?accessType=1&type=6&id=2287">自助服务</a></li>
+	     	<li>|</li>
+              <li><a target="_blank" href="/count?accessType=1&type=6&id=2288">热点查询</a></li>
+	
+  </div>
+</div>
+<div id="contentWrap" class="footerd">京ICP备05002571号 | 中国移动通信版权所有</div>
+
+<input type="hidden" id="portalMappingCode" value="gx" />
+<div class="populbox" id="div_lb_img" style="display:none;">
+<a href="javascript:cleanLbImg();" class="populclose"><img src="images/close.png" border="0" alt="关闭" /></a>
+<img src="images/lb1_maximg.jpg" width="800" height="566" border="0" id="div_max_img"/>
+<input type="hidden" id="timeoutid" />
+<input type="hidden" id="timeoutcount"/>
+</div>
+</body>
+</html>

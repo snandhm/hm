@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xbel version="1.0"
+      xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks"
+      xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info"
+>
+  <bookmark href="file:///home/snhm/%E4%B8%8B%E8%BD%BD/ubuntu-tweak_0.8.7-1~trusty2_all.deb" added="2015-03-25T09:06:06Z" modified="2015-03-31T13:38:54Z" visited="2015-03-25T09:06:06Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-deb"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2015-03-25T09:06:06Z" count="1"/>
+          <bookmark:application name="nautilus" exec="&apos;file-roller %U&apos;" modified="2015-03-25T09:27:08Z" count="8"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2015-03-31T13:38:54Z" count="3"/>
+          <bookmark:application name="Archive Manager" exec="&apos;file-roller %u&apos;" modified="2015-03-31T13:38:48Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///tmp/ubuntu-tweak_0.8.7-1~trusty2_all.deb" added="2015-03-31T13:34:40Z" modified="2015-03-31T13:34:40Z" visited="2015-03-31T13:34:40Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-deb"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2015-03-31T13:34:40Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/snhm/%E4%B8%8B%E8%BD%BD/ubuntu-tweak_0.8.7-1~trusty2_all(1).deb" added="2015-03-31T14:05:47Z" modified="2015-03-31T14:10:52Z" visited="2015-03-31T14:05:47Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-deb"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2015-03-31T14:05:47Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2015-03-31T14:09:48Z" count="5"/>
+          <bookmark:application name="Archive Manager" exec="&apos;file-roller %u&apos;" modified="2015-03-31T14:06:53Z" count="1"/>
+          <bookmark:application name="nautilus" exec="&apos;/usr/bin/software-center %u&apos;" modified="2015-03-31T14:10:52Z" count="3"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/snhm/%E4%B8%8B%E8%BD%BD/Git-the%20simple%20guide.pptx" added="2015-04-15T06:51:40Z" modified="2015-04-15T06:51:40Z" visited="2015-04-15T06:51:40Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/vnd.openxmlformats-officedocument.presentationml.presentation"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2015-04-15T06:51:40Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home" added="2015-04-22T08:37:26Z" modified="2015-04-22T08:37:26Z" visited="2015-04-22T08:37:26Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="nautilus" exec="&apos;nautilus %u&apos;" modified="2015-04-22T08:37:26Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/snhm/examples.desktop" added="2015-04-22T14:32:34Z" modified="2015-04-22T14:32:34Z" visited="2015-04-22T14:32:35Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-desktop"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2015-04-22T14:32:34Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/snhm/%E4%B8%BB%E6%9C%BA/%E7%AE%97%E6%B3%952.docx" added="2015-04-22T14:47:10Z" modified="2015-04-22T14:48:27Z" visited="2015-04-22T14:47:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+        <bookmark:applications>
+          <bookmark:application name="nautilus" exec="&apos;libreoffice --writer %U&apos;" modified="2015-04-22T14:48:27Z" count="2"/>
+          <bookmark:application name="LibreOffice 4.2" exec="&apos;soffice %u&apos;" modified="2015-04-22T14:47:54Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/snhm/%E4%B8%BB%E6%9C%BA/%E5%AE%9E%E9%AA%8C1/%E6%97%A0%E6%A0%87%E9%A2%98%E6%96%87%E6%A1%A3" added="2015-04-22T14:53:22Z" modified="2015-04-22T14:53:48Z" visited="2015-04-22T14:53:22Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="nautilus" exec="&apos;gedit %U&apos;" modified="2015-04-22T14:53:22Z" count="1"/>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2015-04-22T14:53:48Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+</xbel>

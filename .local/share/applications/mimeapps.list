@@ -1,0 +1,5 @@
+[Added Associations]
+application/x-deb=file-roller.desktop;
+
+[Default Applications]
+application/x-deb=file-roller.desktop

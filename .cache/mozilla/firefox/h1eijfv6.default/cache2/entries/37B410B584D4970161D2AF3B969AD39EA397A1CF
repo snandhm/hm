@@ -1,0 +1,636 @@
+﻿$(document).ready( function() {//加载完成后调用的函数
+	var hheight = document.body.clientHeight;//网页可见区域高
+	jQuery("#hidediv").css("height",hheight);
+	jQuery("#hidediv").show();
+	jQuery("#loadimg").show();//显示自动加载图片
+	checkUser();//检查用户状态
+	checkUsername();//自动填充用户名密码
+	shutdk2();
+	var autouser=getCookie("autouser");
+	var autopwd=getCookie("autopwd");
+	if(autouser!=null&&autopwd!=null){//cookies 中有值，进行自动登陆
+		jQuery("#isautologin").attr("checked",true);
+		jQuery("#isautologin1").attr("checked",true);
+		var autologintime=getCookie("autologintime");//退出标识
+		if(autologintime!=null){
+			return;
+		}	
+		jQuery.ajax( {
+			type : "POST",
+			url : "/pLogin",
+			dataType : "json",
+			data : {
+				"username" : autouser,
+				"userpwd" : autopwd,
+				"logintype":2,
+				"portalMappingCode":jQuery("#portalMappingCode").val()
+			},
+			success : function(K) {
+				if (0 == K.RESULTCODE) {
+					jQuery("#sumbit").removeAttr("disabled");	
+					jQuery("#login_con").hide();
+					jQuery("#login_con_user").html('尊敬的' + K.username + '用户，您已在线');
+					jQuery("#login_con_l").show();
+					var sec = K.psec;
+					var min = K.pmin;
+					var hou = K.phour;
+					window.setTimeout( function() {
+						update(sec, min, hou)
+					}, 1000);
+					jQuery("#autotrlb").show();
+					jQuery("#isautologin1").show();
+					showFeixin(K);
+				} else if("timeout"==K.RESULTCODE){
+					window.location.href =K.RESULTDESC;
+				}else if('msg_2103'==K.RESULTCODE||'msg_2102'==K.RESULTCODE){
+					var hheight = document.body.clientHeight;//网页可见区域高
+					jQuery("#hidediv").css("height",hheight);
+					jQuery("#hidediv").show();
+					jQuery("#sverdivmsg").show();
+					jQuery("#svermsg").html(K.RESULTDESC);
+					jQuery("#svercode").html(K.RESULTCODE);
+					jQuery("body").toggleClass("ovebody");
+				}else {
+					jQuery("#sumbit").removeAttr("disabled");
+					showServerMsg(K.RESULTCODE);
+				}
+			},
+			error:function(){
+				showServerMsg("msg_0003");
+			}
+		});
+	}
+	jQuery("#hidediv").hide();
+	jQuery("#loadimg").hide();//隐藏自动加载图片
+});
+
+//保存cookie
+function SetCookie(name,value)// 两个参数，一个是cookie的key，一个是值
+{
+	var Days = 60; // 此 cookie 将被保存 60 天
+	var exp = new Date(); // new Date("December 31, 9998");
+	exp.setHours(exp.getHours() + (Days * 24));
+	document.cookie = name + "=" + escape(value) + ";expires="+ exp.toGMTString();
+}
+//获取cookie中保存的值
+function getCookie(name)
+{
+	var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+	if (arr != null)
+		return unescape(arr[2]);
+	return null;
+}
+//保存用户名、密码
+function setUserPwd(mobile,pwd,ch){
+	jQuery("#savpwd").attr("checked", ch);
+	jQuery("#savpwd1").attr("checked", ch);
+	if(ch==true){
+		if(mobile==null){
+			mobile=document.getElementById("username2").value;
+		}
+		SetCookie("wlanmobile",mobile);
+		if(pwd==null){
+			pwd=document.getElementById("userpwd2").value;
+		}
+		SetCookie("wlanpwd",pwd);
+	}else{
+//		delCookie("wlanmobile");
+		delCookie("wlanpwd");
+	}
+}
+//cookies自动补全用户名密码
+function checkUsername() { 
+	var mobile=getCookie("wlanmobile");
+	var pwd=getCookie("wlanpwd");
+	if(mobile!=null){
+		document.getElementById("username2").value=mobile;
+	}
+	if(pwd!=null){
+		document.getElementById("userpwd2").value=pwd;
+		jQuery("#savpwd").attr("checked",true);
+		jQuery("#savpwd1").attr("checked",true);
+	}
+}
+//删除cookie
+function delCookie(name)
+{
+	var exp = new Date();
+	exp.setTime(exp.getTime() - 1);
+	var cval = getCookie(name);
+	if (cval != null)
+		document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+}
+//获取验证码
+function sendSMS() {
+	var username = document.getElementById("username1").value;
+	if (null == username || "" == username) {
+		showServerMsg('msg_1101');
+		return;
+	}
+	var timeoutid=jQuery("#timeoutid").val();//设置定时调用方法的id到页面
+	if(timeoutid!=null&&timeoutid!=""){
+//		clearTimeout(timeoutid);//清理上一次的提示方法
+		clearInterval(timeoutid);
+	}
+	if(getCookie("smstime"+username)!=null){
+		var exp = new Date();
+		if(parseInt(exp.getTime()/1000)-parseInt(getCookie("smstime"+username))<900){
+				jQuery("#smsimg").attr("src","images/yanz2.png");
+				jQuery("#smstimediv").show();
+				jQuery("#timeoutcount").val((parseInt(exp.getTime()/1000)-parseInt(getCookie("smstime"+username))));
+				var timeoutid=window.setInterval("smsTime()",1000);
+				jQuery("#timeoutid").val(timeoutid);
+				return;
+		}
+	}
+	jQuery("#sendSMS").attr("disabled","disabled");	
+	jQuery.ajax( {
+				type : "POST",
+				url : "/pSendSms",
+				dataType : "json",
+				data : {
+					"username" : username,
+					"portalMappingCode":jQuery("#portalMappingCode").val()
+				},
+				success : function(K) {
+					if (0 == K.RESULTCODE) {
+						showServerMsg(K.RESULTCODE);
+						jQuery("#sendSMS").removeAttr("disabled");
+						jQuery("#smstimediv").show();
+					}else if('timeout'==K.RESULTCODE){
+						window.location.href =K.RESULTDESC;
+					}else if('msg_2103'==K.RESULTCODE||'msg_2102'==K.RESULTCODE){
+						var hheight = document.body.clientHeight;//网页可见区域高
+						jQuery("#hidediv").css("height",hheight);
+						jQuery("#hidediv").show();
+						jQuery("#sverdivmsg").show();
+						jQuery("#svermsg").html(K.RESULTDESC);
+						jQuery("#svercode").html(K.RESULTCODE);
+						//jQuery("body").css("overflow","hidden");
+						jQuery("body").toggleClass("ovebody");
+					}else {
+						showServerMsg(K.RESULTCODE);
+						if('msg_3200'==K.RESULTCODE){
+							jQuery("#smsimg").attr("src","images/yanz2.png");
+							var mins = 15; // 此 cookie 将被保存 15分钟，value为秒
+							var exp = new Date();
+							var smstime=parseInt(exp.getTime()/1000);
+							exp.setMinutes(exp.getMinutes() + mins);
+							document.cookie = "smstime"+username+"=" + escape(smstime) + ";expires="+ exp.toGMTString();
+							jQuery("#smstimediv").show();
+							
+							jQuery("#timeoutcount").val(0);//开始
+							var timeoutid=window.setInterval("smsTime()",1000);
+							jQuery("#timeoutid").val(timeoutid);//记录开始id
+						}
+						jQuery("#sendSMS").removeAttr("disabled");	
+					}
+				},
+				error:function(){
+					showServerMsg("msg_0003");
+				}
+			});
+}
+//实现短信提示时间更新方法
+function smsTime() {
+	var min=parseInt(jQuery("#timeoutcount").val());//循环次数
+	min++;
+	if(min>900){
+		jQuery("#smsimg").attr("src","images/yanz.png");
+		jQuery("#smstimediv").hide();
+		var timeoutid=jQuery("#timeoutid").val();//设置定时调用方法的id到页面
+		if(timeoutid!=null&&timeoutid!=""){
+			clearInterval(timeoutid);
+		}
+	}
+	jQuery("#timeoutcount").val(min);
+//	else{
+		document.getElementById("smstime").innerHTML = 900-min;
+//		var timeoutid=window.setTimeout( function() {smsTime(max,min)}, 1000);
+//		jQuery("#timeoutid").val(timeoutid);//设置定时调用方法的id到页面
+//	}
+};
+//监控手机号码是否改变
+function changeText(){
+	jQuery("#smsimg").attr("src","images/yanz.png");
+}
+/*
+ * 用途：检查用户单次登录时长
+ */
+function checlogin() {
+	var portalMappingCode = jQuery("#portalMappingCode").val();
+	jQuery.ajax({
+		type : "POST",
+		url : "/pChecktime",
+		dataType : "json",
+		data : {
+			"portalMappingCode" : portalMappingCode
+		},
+		success : function(K) {
+			if (1 == K[0]) {autoLtime();
+				// 未登录请求，直接返回登录页面
+				window.location.href = K[1];
+			}
+			if (7 == K[0]) {autoLtime();
+				// 登录缓存标识为空，AC侧已下线，portal同步下线
+				window.location.href = "/pLoginout?portalMappingCode="
+					+ portalMappingCode + "&outType=7";
+			}
+			if (8 == K[0]) {autoLtime();
+				//缓存中存在用户登录信息和会话中的登录信息是不一致
+				window.location.href = "/pLoginout?portalMappingCode="
+					+ portalMappingCode + "&outType=8";
+			}
+			if (9 == K[0]) {autoLtime();
+				// 09
+				window.location.href = "/pLoginout?portalMappingCode="
+					+ portalMappingCode + "&outType=9";
+			}
+			if (4 == K[0]) {autoLtime();
+				// 单次登录时间到了，自动退出
+				window.location.href = "/pLoginout?portalMappingCode="
+						+ portalMappingCode + "&outType=4";
+			}
+			if (5 == K[0]) {autoLtime();
+				// 单日总时长到了，自动退出
+				window.location.href = "/pLoginout?portalMappingCode="
+						+ portalMappingCode + "&outType=5";
+			}
+		}
+	});
+}
+//弹窗方法
+function showpop() {
+	clearerrmsg();
+//	var wdpop = jQuery(window).width() / 2 - 310 + "px";
+//	var htpop = jQuery(window).height() / 2 - 180 + "px";
+//	jQuery("#popk").show();
+//	jQuery("#hidediv").show();
+//	jQuery("#popk").css("top", htpop);
+//	jQuery("#popk").css("left", wdpop);
+}
+function shutdk() {
+//	jQuery("#popk").hide();
+//	jQuery("#hidediv").hide();
+//	jQuery("#check_agree").attr("checked", true);
+}
+function shutdk2(){
+	jQuery("#popk").hide();
+	jQuery("#hidediv").hide();
+	//jQuery("body").css("overflow","auto");
+	jQuery("body").toggleClass("ovebody");
+}
+//关闭弹窗提示
+function shutdk3() {
+	jQuery("#sverdivmsg").hide();
+	jQuery("#hidediv").hide();
+	//jQuery("body").css("overflow","auto");
+	jQuery("body").toggleClass("ovebody");
+
+}
+//替代alert弹窗方法
+function showServerMsg(code){
+	var hheight = document.body.clientHeight;//网页可见区域高
+	jQuery("#hidediv").css("height",hheight);
+	jQuery("#hidediv").show();
+	jQuery("#sverdivmsg").show();
+	if(null==map.get(code)||''==map.get(code))
+	{
+		jQuery("#svermsg").html('抱歉，出现未知错误，请联系管理员！');
+	}
+	else
+	{
+		jQuery("#svermsg").html(map.get(code));
+	}
+	jQuery("#svercode").html(code);
+	jQuery("body").toggleClass("ovebody");
+	
+	//jQuery("body").css("overflow","hidden");
+}
+function shutad() {
+	jQuery("#pop_ad").hide();
+}
+
+function clearerrmsg() {
+	//document.getElementById("err_msg").innerHTML = "";
+}
+
+//实现更新的主要方法
+function update(sec, min, hou) {
+	var hou = parseInt(hou);
+	var min = parseInt(min);
+	var sec = parseInt(sec);
+	sec++;
+	// 秒数自增
+	if (sec == 60) {
+		sec = 0;
+		min += 1;
+		// 如果秒数超过60,分数就自增
+	}
+	if (min == 60) {
+		// 如果分数超过60,小时数就自增
+		min = 0;
+		hou += 1;
+	}
+	if (min % 5 == 0 && sec == 0) {
+		//每5分钟同步检查一次
+		checlogin();
+	}
+	var shi = hou;
+	var fen = min;
+	var miao = sec;
+	
+	if (shi < 10) {
+		shi = '0' + shi;
+	}
+	if (fen < 10) {
+		fen = '0' + fen;
+	}
+	if (miao < 10) {
+		miao = '0' + miao;
+	}
+	jQuery("#login_time").html(shi+":"+fen+":"+miao);// 在文本框中输出时间
+	window.setTimeout( function() {update(sec, min, hou)}, 1000);
+};
+//登录方法
+function sumbit(bs) {
+	var userId = document.getElementById("username"+bs);
+	if (null != userId) {
+		var username = document.getElementById("username"+bs).value;
+		if (null == username || "" == username) {
+			showServerMsg("msg_1101");
+			return;
+		}
+	}
+	var userpwdId = document.getElementById("userpwd"+bs);
+	if (null != userpwdId) {
+		var userpwd = document.getElementById("userpwd"+bs).value;
+		if (null == userpwd || "" == userpwd) {
+			showServerMsg("msg_1011");
+			return;
+		}
+	}
+	if(jQuery("#savpwd").attr("checked")==true){//是否需要保存密码
+		setUserPwd(null,null,true);
+	}
+	var isautologin = document.getElementById("isautologin");
+	if (null !=isautologin) {
+		if (isautologin.checked) {//是否需要保存密码
+			SetCookie("autouser",username);
+			SetCookie("autopwd",userpwd);
+		}
+	}
+	var check_agree = document.getElementById("check_agree");
+	if (null != check_agree) {
+		if (!check_agree.checked) {
+//			var wdpop = jQuery(window).width() / 2 - 310 + "px";
+//			var htpop = jQuery(window).height() / 2 - 180 + "px";
+//			jQuery("#popk").show();
+//			jQuery("#hidediv").show();
+//			jQuery("#popk").css("top", htpop);
+//			jQuery("#popk").css("left", wdpop);
+			return;
+		}
+	}
+	jQuery("#sumbit").attr("disabled","disabled");	
+	jQuery.ajax( {
+		type : "POST",
+		url : "/pLogin",
+		dataType : "json",
+		data : {
+			"username" : username,
+			"userpwd" : userpwd,
+			"logintype":bs,
+			"isautologin":jQuery("#isautologin").attr("checked"),
+			"portalMappingCode":jQuery("#portalMappingCode").val()
+		},
+		success : function(K) {
+			if (0 == K.RESULTCODE) {
+				jQuery("#sumbit").removeAttr("disabled");	
+				jQuery("#login_con").hide();
+				jQuery("#login_con_user").html('尊敬的' + K.username + '用户，您已在线');
+				jQuery("#login_con_l").show();
+//				sucessLogin(K);
+				var sec = K.psec;
+				var min = K.pmin;
+				var hou = K.phour;
+				window.setTimeout( function() {
+					update(sec, min, hou)
+				}, 1000);
+				showFeixin(K);
+				if (null !=isautologin) {
+					if (bs==2&&isautologin.checked) {//是否需要保存密码
+						jQuery("#autotrlb").show();
+						jQuery("#isautologin1").show();
+					}
+				}
+			} else if("timeout"==K.RESULTCODE){
+				window.location.href =K.RESULTDESC;
+			}else if('msg_2103'==K.RESULTCODE||'msg_2102'==K.RESULTCODE){
+				var hheight = document.body.clientHeight;//网页可见区域高
+				jQuery("#hidediv").css("height",hheight);
+				jQuery("#hidediv").show();
+				jQuery("#sverdivmsg").show();
+				jQuery("#svermsg").html(K.RESULTDESC);
+				jQuery("#svercode").html(K.RESULTCODE);
+				//jQuery("body").css("overflow","hidden");
+				jQuery("body").toggleClass("ovebody");
+			}else {
+				jQuery("#sumbit").removeAttr("disabled");	
+				//document.getElementById("err_msg").innerHTML = K.RESULTDESC;
+				showServerMsg(K.RESULTCODE);
+			}
+		},
+		error:function(){
+			showServerMsg("msg_0003");
+		}
+	});
+
+}
+//检查用户状态
+function checkUser() {
+	jQuery.ajax( {
+		type : "POST",
+		url : "/pCheckUser",
+		dataType : "json",
+		success : function(K) {
+			if (0 == K.RESULTCODE) {
+				jQuery("#login_con").hide();
+				jQuery("#login_con_user").html('尊敬的' + K.username + '用户，您已在线');
+				jQuery("#login_con_l").show();
+//				sucessLogin(K);
+				var sec = K.psec;
+				var min = K.pmin;
+				var hou = K.phour;
+				window.setTimeout( function() {
+					update(sec, min, hou)
+				}, 1000);
+				showFeixin(K);
+				if(jQuery("#isautologin").attr("checked")==false){
+					jQuery("#autotr").hide();
+				}else{
+					jQuery("#autotr").show();
+				}
+			}
+		else{
+			var popk = document.getElementById("popk");
+			if (null != popk) {
+				showpop();
+			}
+		}
+	}
+	});
+}
+
+function select() {
+	var select = document.getElementById("select").value;
+	clearerrmsg();
+	if (select == "2") {
+		jQuery("#sendsms").hide();
+	} else {
+		jQuery("#sendsms").show();
+	}
+}
+
+function checkMethod() {
+	jQuery.ajax({
+		type : "POST",
+		url : "/pCheckMethod",
+		dataType : "json",
+		success : function(K) {
+			if (0 == K.method) {
+				jQuery("#login_mode").remove();
+				jQuery("#login_user").remove();
+				jQuery("#sendsms").remove();
+				jQuery("#login_pwd").remove();
+			} else if (1 == K.method) {
+				jQuery("#login_mode").remove();
+			} else if (2 == K.method) {
+				jQuery("#login_mode").remove();
+				jQuery("#sendsms").remove();
+			}
+		}
+	});
+}
+//封装登录成功后提示参数
+function sucessLogin(K){
+	if(null!=K.LOGINTOTAL_MS){
+		jQuery("#login_con_user").after("<div>"+K.LOGINTOTAL_MS+"</div>");
+	}
+	if(null!=K.LOGINTOTAL_MA){
+		jQuery("#login_con_user").after("<div>"+K.LOGINTOTAL_MA+"</div>");
+	}
+	if(null!=K.LOGINTOTAL_DS){
+		jQuery("#login_con_user").after("<div>"+K.LOGINTOTAL_DS+"</div>");
+	}
+	if(null!=K.LOGINTOTAL_DA){
+		jQuery("#login_con_user").after("<div>"+K.LOGINTOTAL_DA+"</div>");
+	}
+	if(null!=K.LOGINTIME_DS){
+		jQuery("#login_con_user").after("<div>"+K.LOGINTIME_DS+"</div>");
+	}
+	if(null!=K.LOGINTIME_DA){
+		jQuery("#login_con_user").after("<div>"+K.LOGINTIME_DA+"</div>");
+	}
+	if(null!=K.LOGINTIME_MS){
+		jQuery("#login_con_user").after("<div>"+K.LOGINTIME_MS+"</div>");
+	}	
+	if(null!=K.LOGINTIME_MA){
+		jQuery("#login_con_user").after("<div>"+K.LOGINTIME_MA+"</div>");
+	}
+}
+
+//退出方法
+function loginOut(){
+	autoLtime();
+	var portalMappingCode=jQuery("#portalMappingCode").val();
+	var isautologin = document.getElementById("isautologin1");
+	if (null != isautologin) {
+		if (!isautologin.checked) {//是否需要保存密码
+			delCookie("autouser");
+			delCookie("autopwd");
+		}
+	}
+	window.location.href ="/pLoginout?isautologin="+isautologin.checked+"&portalMappingCode="+portalMappingCode;
+}
+//新增退出标识，防止退出后立马自动登陆
+function autoLtime(){
+	var mins = 1; // 此 cookie 将被保存 1分钟，value为秒
+	var exp = new Date();
+	var smstime=parseInt(exp.getTime()/1000);
+	exp.setMinutes(exp.getMinutes() + mins);
+	document.cookie = "autologintime=true;expires="+ exp.toGMTString();
+}
+function replaceimg(imgurl,linkurl){
+	if(linkurl!=null&&linkurl!=''){
+		jQuery("#imgyq").html("<a target='_blank' href='"+linkurl+"'><img src='"+imgurl+"' /></a>");
+	}else{
+		jQuery("#imgyq").html("<img src='"+imgurl+"' />");
+	}
+}
+function onAutoLogin(){
+	jQuery("#isautologin").attr("checked", jQuery("#isautologin1").attr("checked"));
+}
+function onAutoLogin2(){
+	jQuery("#isautologin1").attr("checked", jQuery("#isautologin").attr("checked"));
+}
+//点击轮播图片，处理js方法
+function onClickLbImg(urlstr,id){
+	if(urlstr!=null&&urlstr!=''){
+		if(urlstr.indexOf('_maximg.jpg')!=-1){
+			var imgname=urlstr.substring(6);
+			jQuery("#div_max_img").attr("src",'images/'+imgname);
+			if(imgname.indexOf("lb3")!=-1){
+				jQuery("#div_max_img").attr("usemap","#div_max_Map");
+				jQuery("#div_lb_img").append('<map name="Map" id="div_max_Map"><area shape="rect" coords="527,492,635,543" href="http://www.js.10086.cn/mall/" target="_blank"/></map>');
+			}
+			jQuery("#div_lb_img").show();
+			var hheight = document.body.clientHeight;//网页可见区域高
+			jQuery("#hidediv").css("height",hheight);
+			jQuery("#hidediv").show();
+			jQuery("body").toggleClass("ovebody");
+			return;
+		}
+		else{
+			window.open('/count?accessType=1&type=2&id='+id, "_blank"); 
+		}
+	}
+}
+//关闭轮播
+function cleanLbImg(){
+	jQuery("#div_lb_img").hide();
+	jQuery("#hidediv").hide();
+	jQuery("body").toggleClass("ovebody");
+}
+function showFeixin(K){
+	if(0 ==K.feixin){
+		window.fxbar_settings = {
+	            gen_c_url: "/FetionGetc.do?" + new Date, // 获取凭证的接口的url，不能为空。
+	            c_domain: "wlan.fj.10086.cn", // 凭证对应的域，不能为空。
+	            tag: "fujianwlan", // 第三方对应的tag，不能为空。
+	            domain: "wlan.fj.10086.cn", // 第三方网页对应的域。
+	            autoExpand: false, // true展开，false收缩
+	            width: 10, // 飞信BAR主面板的宽度，设置为200
+	            height: 350, // 飞信BAR主面板的高度，设置为350
+	            pos: { right: "0px", bottom: "100px" }, // 飞信BAR在左下角，距左边与底部10px显示
+	            buoyPos: 0, // 浮标在下方显示
+	            skin: "default" // 飞信BAR新皮肤，default为默认皮肤
+	        };
+	        var head = document.getElementsByTagName("head")[0];
+	        var script = document.createElement("script");
+	        script.src = "http://webim.feixin.10086.cn/webimbar/v2/js/fetionPreInit.js?"+ new Date;
+	        head.appendChild(script);
+	}
+}
+b�$��~      U-&sU-&r;
+i?U6�   1:http://218.207.217.3/Portal/gx/web/v2/js/util.js request-method GET response-head HTTP/1.1 200 OK
+Server: Tengine
+Date: Tue, 14 Apr 2015 08:51:59 GMT
+Content-Type: application/javascript
+Content-Length: 19656
+Etag: W/"19656-1427251739000"
+Last-Modified: Wed, 25 Mar 2015 02:48:59 GMT
+Expires: Tue, 21 Apr 2015 08:51:59 GMT
+Cache-Control: max-age=604800
+Accept-Ranges: bytes
+ uncompressed-len 0   L�

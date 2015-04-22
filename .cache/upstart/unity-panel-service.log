@@ -1,0 +1,52 @@
+
+(unity-panel-service:1680): Indicator-Appmenu-WARNING **: Already have a menu for window ID 60817587 with path /com/canonical/menu/3A000B3 from :1.80, unregistering that one
+
+(unity-panel-service:1680): Indicator-Appmenu-WARNING **: Already have a menu for window ID 60817587 with path /com/canonical/menu/3A000B3 from :1.84, unregistering that one
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): Indicator-Appmenu-WARNING **: Already have a menu for window ID 52428979 with path /com/canonical/menu/32000B3 from :1.88, unregistering that one
+
+** (unity-panel-service:1680): WARNING **: Failed to fetch property `_GTK_UNIQUE_BUS_NAME': 已到超时限制
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): GLib-GObject-WARNING **: g_object_weak_unref: couldn't find weak ref 0xb55bd410(0x87e9868)
+
+(unity-panel-service:1680): Indicator-Appmenu-WARNING **: Already have a menu for window ID 52428979 with path /com/canonical/menu/32000B3 from :1.88, unregistering that one
+
+** (unity-panel-service:1680): WARNING **: Failed to get active window: 已到超时限制
+
+** (unity-panel-service:1680): WARNING **: Failed to get active window: 已到超时限制
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): Indicator-Appmenu-WARNING **: gdk_xid_get_mwm_hints: Unable to get hints for 37769147: Error Code: 3
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): Indicator-Appmenu-CRITICAL **: menus_destroyed: assertion 'wm != NULL' failed
+
+(unity-panel-service:1680): GLib-GObject-WARNING **: g_object_weak_unref: couldn't find weak ref 0xb55bd410(0x87e9868)
+
+** (unity-panel-service:1680): WARNING **: Failed to fetch xid: 已到超时限制
+
+** (unity-panel-service:1680): WARNING **: Failed to fetch type: 已到超时限制
+
+** (unity-panel-service:1680): WARNING **: Failed to fetch monitor: 已到超时限制

@@ -1,0 +1,260 @@
+﻿// 该文件是为了将飞信Bar嵌入到各省网上营业厅
+// 初始化相关参数
+(function() {
+
+    var settings = fxbar_settings;
+    // true展开，false收缩 
+    if (fxbar_settings.autoExpand == undefined)
+        settings.autoExpand = true;
+    // 第三方的页面编码，可以为空。 默认utf-8
+    if (fxbar_settings.charset == undefined)
+        settings.charset = "";
+
+    var 
+    // Map over fetionQuery in case of overwrite
+	fetionPreInit = window.fetionPreInit = function() { },
+    // ajax helper
+    ajaxHelper = {
+        xhr: function() {
+            return window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
+        },
+
+        accepts: {
+            xml: "application/xml, text/xml",
+            html: "text/html",
+            script: "text/javascript, application/javascript",
+            json: "application/json, text/javascript",
+            text: "text/plain",
+            _default: "*/*"
+        },
+
+        param: function(a) {
+            var s = [];
+
+            function add(key, value) {
+                s[s.length] = encodeURIComponent(key) + '=' + encodeURIComponent(value);
+            };
+
+            // Otherwise, assume that it's an object of key/value pairs
+            // Serialize the key/values
+            for (var j in a)
+                add(j, a[j]);
+
+            // Return the resulting serialization
+            return s.join("&").replace(/%20/g, "+");
+        },
+
+        now: function() {
+            return +new Date;
+        },
+
+        ajax: function(s) {
+            var status, data,
+			type = s.type.toUpperCase();
+
+            // convert data object to string
+            s.data = ajaxHelper.param(s.data);
+
+            if (s.cache === false && type == "GET") {
+                var ts = ajaxHelper.now();
+                // try replacing _= if it is there
+                var ret = s.url.replace(/(\?|&)_=.*?(&|$)/, "$1_=" + ts + "$2");
+                // if nothing was replaced, add timestamp to the end
+                s.url = ret + ((ret == s.url) ? (s.url.match(/\?/) ? "&" : "?") + "_=" + ts : "");
+            }
+
+            // If data is available, append data to url for get requests
+            if (s.data && type == "GET") {
+                s.url += (s.url.match(/\?/) ? "&" : "?") + s.data;
+
+                // IE likes to send both get and post data, prevent this
+                s.data = null;
+            }
+
+            var requestDone = false;
+
+            // Create the request object
+            var xhr = ajaxHelper.xhr();
+
+            // Open the socket
+            xhr.open(type, s.url, s.async);
+
+            // Need an extra try/catch for cross domain requests in Firefox 3
+            try {
+                // Set the correct header, if data is being sent
+                if (s.data)
+                    xhr.setRequestHeader("Content-Type", s.contentType);
+
+                // Set header so the called script knows that it's an XMLHttpRequest
+                xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+                // Set the Accepts header for the server, depending on the dataType
+                xhr.setRequestHeader("Accept", s.dataType && ajaxHelper.accepts[s.dataType] ?
+				ajaxHelper.accepts[s.dataType] + ", */*" :
+				ajaxHelper.accepts._default);
+            } catch (e) { }
+
+            // Wait for a response to come back
+            var onreadystatechange = function(isTimeout) {
+                // The request was aborted, clear the interval and decrement jQuery.active
+                if (xhr.readyState == 0) {
+                    if (ival) {
+                        // clear poll interval
+                        clearInterval(ival);
+                        ival = null;
+                    }
+                    // The transfer is complete and the data is available, or the request timed out
+                } else if (!requestDone && xhr && (xhr.readyState == 4 || isTimeout == "timeout")) {
+                    requestDone = true;
+
+                    // clear poll interval
+                    if (ival) {
+                        clearInterval(ival);
+                        ival = null;
+                    }
+
+                    status = isTimeout == "timeout" ? "timeout" :
+					!ajaxHelper.httpSuccess(xhr) ? "error" :
+					"success";
+
+                    if (status == "success") {
+                        // Watch for, and catch, XML document parse errors
+                        try {
+                            // process the data (runs the xml through httpData regardless of callback)
+                            data = ajaxHelper.httpData(xhr, s.dataType);
+                        } catch (e) {
+                            status = "parsererror";
+                        }
+                    }
+
+                    // Make sure that the request was successful or notmodified
+                    if (status == "success") {
+                        success();
+                    } else
+                        ajaxHelper.handleError(s, xhr, status);
+
+                    if (isTimeout)
+                        xhr.abort();
+
+                    // Stop memory leaks
+                    if (s.async)
+                        xhr = null;
+                }
+            };
+
+            if (s.async) {
+                // don't attach the handler to the request, just poll it instead
+                var ival = setInterval(onreadystatechange, 13);
+
+                // Timeout checker
+                if (s.timeout > 0)
+                    setTimeout(function() {
+                        // Check to see if the request is still happening
+                        if (xhr && !requestDone)
+                            onreadystatechange("timeout");
+                    }, s.timeout);
+            }
+
+            // Send the data
+            try {
+                xhr.send(s.data);
+            } catch (e) {
+                ajaxHelper.handleError(s, xhr, null, e);
+            }
+
+            // firefox 1.5 doesn't fire statechange for sync requests
+            if (!s.async)
+                onreadystatechange();
+
+            function success() {
+                // If a local callback was specified, fire it and pass it the data
+                if (s.success)
+                    s.success(data, status);
+            }
+
+            // return XMLHttpRequest to allow aborting the request etc.
+            return xhr;
+        },
+
+        // Determines if an XMLHttpRequest was successful or not
+        httpSuccess: function(xhr) {
+            try {
+                // IE error sometimes returns 1223 when it should be 204 so treat it as success, see #1450
+                return !xhr.status && location.protocol == "file:" ||
+				(xhr.status >= 200 && xhr.status < 300) || xhr.status == 304 || xhr.status == 1223;
+            } catch (e) { }
+            return false;
+        },
+
+        handleError: function(s, xhr, status, e) {
+            // If a local callback was specified, fire it and pass it the data
+            if (s.error) s.error(xhr, status, e);
+        },
+
+        httpData: function(xhr, type) {
+            var data = xhr.responseText;
+
+            // Get the JavaScript object, if JSON is used.
+            if (type == "json")
+                data = window["eval"]("(" + data + ")");
+
+            return data;
+        }
+    };
+
+    fetionPreInit.getFetionSsic = function(callback) {
+        var s = {};
+        s.url = settings.gen_c_url;
+
+        s.type = "GET";
+        s.async = true;
+        s.cache = false;
+        s.contentType = "application/x-www-form-urlencoded";
+        s.dataType = "text";
+
+        s.success = function(ssic, textStatus) {
+            callback(200, ssic, fxbar_settings.c_domain);
+        };
+
+        s.error = function(xhr, textStatus) {
+            callback(301);
+        }
+
+        ajaxHelper.ajax(s);
+    };
+
+    // 调用初始化接口
+    var fetionbarUrl = "http://webim.feixin.10086.cn/webimbar/";
+
+    settings.isSSL = (typeof settings.isSSL !== "undefined") ? settings.isSSL : window.location.protocol && window.location.protocol.toString().toUpperCase() == "HTTPS:";
+
+    if (settings.isSSL) {
+        fetionbarUrl = "https://webim.feixin.10086.cn/webimbar/";
+    }
+
+    settings.preLogin = fetionPreInit.getFetionSsic;
+    settings.autologin = settings.autologin !== false ? 1 : 0;
+    settings.domain = settings.domain || "";
+    settings.tag = settings.tag || "";
+    settings.charset = settings.charset || "";
+    settings.isSSL = settings.isSSL ? "1" : "0";
+    settings.skin = settings.skin || "default";
+
+    var script = document.createElement("script");
+    script.src = fetionbarUrl + "initializev2.aspx?prelogin=fetionPreInit.getFetionSsic&domain=" + settings.c_domain + "&tag=" + settings.tag + "&autologin=" + settings.autologin + "&charset=" + settings.charset + "&isSsl=" + settings.isSSL + "&skin=" + settings.skin + "&_=" + ajaxHelper.now();
+
+    var head = document.getElementsByTagName("head")[0];
+    head.appendChild(script);
+})();�
+�1R6      U,ՇU,Ո;	��UTb�   q:http://webim.feixin.10086.cn/webimbar/v2/js/fetionPreInit.js?Tue%20Apr%2014%202015%2016:53:27%20GMT+0800%20(CST) necko:classified 1 request-method GET response-head HTTP/1.1 200 OK
+Cache-Control: max-age=2592000
+Content-Length: 9231
+Content-Type: application/x-javascript
+Content-Location: http://webim.feixin.10086.cn
+Last-Modified: Mon, 06 Jan 2014 10:18:16 GMT
+Accept-Ranges: bytes
+Etag: "0e4f39cc8acf1:4e1a"
+Server: Microsoft-IIS/6.0
+X-Powered-By: ASP.NET
+Date: Tue, 14 Apr 2015 08:53:53 GMT
+ uncompressed-len 0   $

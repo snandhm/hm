@@ -384,3 +384,84 @@ cd/mnt/hgfs/共享
 sudo passwd
 sudo passwd root
 su
+sudo passwd root
+su
+cd home
+cd /home
+cd snhm
+cd Linux101-assignment
+cd shell
+cd AddUsers
+vi addUers
+vi addUers.sh
+vi addUsers.sh
+git commit -a
+git status
+git push
+git add <addUsers.sh>
+git add addUsers.sh
+git commit -a
+git push
+git push --set-upstream origin change_first_line
+git status
+git add addUsers.sh
+git push
+git commit -a
+git add addUsers.sh.swp
+git add addUsers.sh
+git push
+git push --setgit push --set-upstream origin change_first_line
+git push --set-upstream origin change_first_line
+vi addUsers
+vi addUsers.sh
+git branch
+git checkout -b change_first_line
+vi addUsers.sh
+git commit -a
+git status
+git add <addUsers.sh>
+git add addUsers.sh
+git commit -a
+git add addUsers.sh
+git commit
+git add addUsers.sh
+git add -p <addUsers.sh>
+git add -p addUsers.sh
+git commit -a
+git add -p addUsers
+git add -p addUsers.sh
+git commit
+git push
+git push --set-upstream origin change_first_line
+git log
+git push
+git push --set-upstream origin change_first_line
+vi addUsers.sh
+git add -p addUsers.sh
+git commit
+git push
+git push --set-upstream origin change_first_line
+git commit
+git add -p addUsers.sh
+vi addUsers.sh
+git add -p addUsers.sh
+git commit -a
+git push
+git/config
+.git/config
+.git / config
+git / config
+git config
+git config --global uset.name
+git config --global uset.name amonest
+git config --global user.name amonest
+git config --global snandhm amonest
+git config --global user.name amonest
+git config --global user.email amonest
+git config --global user.email 2528682029@qq.com
+git push original master
+git push
+git config --global user.name "snandhm"
+git config --global user.email 2528682029@qq.com
+git push
+git push https://github.com/snandhm/Linux101-assignment
